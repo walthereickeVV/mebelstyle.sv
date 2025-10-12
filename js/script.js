@@ -1,8 +1,7 @@
-// NutriVision 3D - Продвинутый AI планировщик питания с демо-режимом
+// NutriVision 3D - Продвинутый AI планировщик питания
 class NutriVision3D {
     constructor() {
-        // Для GitHub Pages используем демо-режим
-        this.API_BASE_URL = null;
+        this.API_BASE_URL = 'http://localhost:3001';
         this.currentPlan = null;
         this.isRotating = false;
         this.init();
@@ -12,7 +11,7 @@ class NutriVision3D {
         this.bindEvents();
         this.init3DEffects();
         this.loadFromStorage();
-        console.log('🚀 NutriVision 3D инициализирован в демо-режиме');
+        console.log('🚀 NutriVision 3D инициализирован');
     }
 
     bindEvents() {
@@ -26,10 +25,10 @@ class NutriVision3D {
             this.show3DDemo();
         });
 
-        // Форма AI - теперь использует демо-данные
+        // Форма AI
         document.getElementById('aiForm3D').addEventListener('submit', (e) => {
             e.preventDefault();
-            this.generateDemoPlan();
+            this.generateAIPlan();
         });
 
         // Чипсы выбора
@@ -58,315 +57,6 @@ class NutriVision3D {
         });
     }
 
-    generateDemoPlan() {
-        const button = document.querySelector('.btn-generate-3d');
-        
-        // Показываем индикатор загрузки
-        button.classList.add('loading');
-        
-        // Имитируем загрузку AI
-        setTimeout(() => {
-            const preferences = {
-                dietGoal: document.getElementById('goal3D').value,
-                dietType: document.querySelector('.chip-3d.active').dataset.value,
-                excludeFoods: this.getExclusionTags()
-            };
-            
-            // Генерируем демо-план на основе выбранных предпочтений
-            const demoPlan = this.generateSmartDemoPlan(preferences);
-            
-            this.currentPlan = demoPlan;
-            this.display3DPlan(demoPlan);
-            this.showResults();
-            this.showSuccessAnimation();
-            
-            button.classList.remove('loading');
-        }, 2000); // 2 секунды "загрузки" для реалистичности
-    }
-
-    generateSmartDemoPlan(preferences) {
-        // Умная генерация демо-плана на основе выбранных предпочтений
-        const diets = {
-            balanced: this.getBalancedMeals(),
-            keto: this.getKetoMeals(),
-            vegan: this.getVeganMeals(),
-            mediterranean: this.getMediterraneanMeals()
-        };
-        
-        const selectedMeals = diets[preferences.dietType] || diets.balanced;
-        
-        return {
-            week: [
-                {
-                    day: "Понедельник",
-                    meals: {
-                        breakfast: selectedMeals.breakfast[0],
-                        lunch: selectedMeals.lunch[0],
-                        dinner: selectedMeals.dinner[0]
-                    }
-                },
-                {
-                    day: "Вторник",
-                    meals: {
-                        breakfast: selectedMeals.breakfast[1],
-                        lunch: selectedMeals.lunch[1],
-                        dinner: selectedMeals.dinner[1]
-                    }
-                },
-                {
-                    day: "Среда",
-                    meals: {
-                        breakfast: selectedMeals.breakfast[2],
-                        lunch: selectedMeals.lunch[2],
-                        dinner: selectedMeals.dinner[2]
-                    }
-                },
-                {
-                    day: "Четверг",
-                    meals: {
-                        breakfast: selectedMeals.breakfast[0],
-                        lunch: selectedMeals.lunch[1],
-                        dinner: selectedMeals.dinner[2]
-                    }
-                },
-                {
-                    day: "Пятница",
-                    meals: {
-                        breakfast: selectedMeals.breakfast[1],
-                        lunch: selectedMeals.lunch[2],
-                        dinner: selectedMeals.dinner[0]
-                    }
-                },
-                {
-                    day: "Суббота",
-                    meals: {
-                        breakfast: selectedMeals.breakfast[2],
-                        lunch: selectedMeals.lunch[0],
-                        dinner: selectedMeals.dinner[1]
-                    }
-                },
-                {
-                    day: "Воскресенье",
-                    meals: {
-                        breakfast: selectedMeals.breakfast[0],
-                        lunch: selectedMeals.lunch[2],
-                        dinner: selectedMeals.dinner[1]
-                    }
-                }
-            ]
-        };
-    }
-
-    getBalancedMeals() {
-        return {
-            breakfast: [
-                {
-                    name: "Овсяная каша с ягодами и орехами",
-                    ingredients: [
-                        { name: "овсяные хлопья", quantity: 50, unit: "г" },
-                        { name: "молоко", quantity: 200, unit: "мл" },
-                        { name: "черника", quantity: 100, unit: "г" },
-                        { name: "грецкие орехи", quantity: 30, unit: "г" }
-                    ]
-                },
-                {
-                    name: "Тост с авокадо и яйцом пашот",
-                    ingredients: [
-                        { name: "хлеб цельнозерновой", quantity: 2, unit: "ломтик" },
-                        { name: "авокадо", quantity: 1, unit: "шт" },
-                        { name: "яйцо", quantity: 2, unit: "шт" },
-                        { name: "лимонный сок", quantity: 10, unit: "мл" }
-                    ]
-                },
-                {
-                    name: "Гречневая каша с фруктами",
-                    ingredients: [
-                        { name: "гречка", quantity: 60, unit: "г" },
-                        { name: "банан", quantity: 1, unit: "шт" },
-                        { name: "корица", quantity: 5, unit: "г" },
-                        { name: "мед", quantity: 20, unit: "г" }
-                    ]
-                }
-            ],
-            lunch: [
-                {
-                    name: "Куриный салат с киноа",
-                    ingredients: [
-                        { name: "куриная грудка", quantity: 150, unit: "г" },
-                        { name: "киноа", quantity: 100, unit: "г" },
-                        { name: "помидор", quantity: 2, unit: "шт" },
-                        { name: "огурец", quantity: 1, unit: "шт" },
-                        { name: "оливковое масло", quantity: 15, unit: "мл" }
-                    ]
-                },
-                {
-                    name: "Овощной суп с нутом",
-                    ingredients: [
-                        { name: "нут", quantity: 100, unit: "г" },
-                        { name: "морковь", quantity: 100, unit: "г" },
-                        { name: "сельдерей", quantity: 50, unit: "г" },
-                        { name: "лук", quantity: 1, unit: "шт" },
-                        { name: "чеснок", quantity: 2, unit: "зубчик" }
-                    ]
-                },
-                {
-                    name: "Лосось с булгуром",
-                    ingredients: [
-                        { name: "лосось", quantity: 200, unit: "г" },
-                        { name: "булгур", quantity: 120, unit: "г" },
-                        { name: "шпинат", quantity: 100, unit: "г" },
-                        { name: "лимон", quantity: 0.5, unit: "шт" }
-                    ]
-                }
-            ],
-            dinner: [
-                {
-                    name: "Индейка с овощами на пару",
-                    ingredients: [
-                        { name: "филе индейки", quantity: 180, unit: "г" },
-                        { name: "брокколи", quantity: 200, unit: "г" },
-                        { name: "цветная капуста", quantity: 150, unit: "г" },
-                        { name: "специи", quantity: 5, unit: "г" }
-                    ]
-                },
-                {
-                    name: "Тыквенный крем-суп",
-                    ingredients: [
-                        { name: "тыква", quantity: 300, unit: "г" },
-                        { name: "лук", quantity: 1, unit: "шт" },
-                        { name: "сливки", quantity: 50, unit: "мл" },
-                        { name: "имбирь", quantity: 10, unit: "г" }
-                    ]
-                },
-                {
-                    name: "Омлет с грибами и сыром",
-                    ingredients: [
-                        { name: "яйцо", quantity: 3, unit: "шт" },
-                        { name: "шампиньоны", quantity: 150, unit: "г" },
-                        { name: "сыр", quantity: 50, unit: "г" },
-                        { name: "петрушка", quantity: 10, unit: "г" }
-                    ]
-                }
-            ]
-        };
-    }
-
-    getKetoMeals() {
-        return {
-            breakfast: [
-                {
-                    name: "Яичница с авокадо и беконом",
-                    ingredients: [
-                        { name: "яйцо", quantity: 3, unit: "шт" },
-                        { name: "авокадо", quantity: 1, unit: "шт" },
-                        { name: "бекон", quantity: 100, unit: "г" },
-                        { name: "сливочное масло", quantity: 20, unit: "г" }
-                    ]
-                }
-            ],
-            lunch: [
-                {
-                    name: "Салат с курицей и авокадо",
-                    ingredients: [
-                        { name: "куриная грудка", quantity: 200, unit: "г" },
-                        { name: "авокадо", quantity: 1, unit: "шт" },
-                        { name: "салат айсберг", quantity: 100, unit: "г" },
-                        { name: "оливковое масло", quantity: 20, unit: "мл" }
-                    ]
-                }
-            ],
-            dinner: [
-                {
-                    name: "Лосось со спаржей",
-                    ingredients: [
-                        { name: "лосось", quantity: 250, unit: "г" },
-                        { name: "спаржа", quantity: 200, unit: "г" },
-                        { name: "лимон", quantity: 0.5, unit: "шт" },
-                        { name: "оливковое масло", quantity: 15, unit: "мл" }
-                    ]
-                }
-            ]
-        };
-    }
-
-    getVeganMeals() {
-        return {
-            breakfast: [
-                {
-                    name: "Чиа-пудинг с ягодами",
-                    ingredients: [
-                        { name: "семена чиа", quantity: 40, unit: "г" },
-                        { name: "кокосовое молоко", quantity: 200, unit: "мл" },
-                        { name: "клубника", quantity: 100, unit: "г" },
-                        { name: "миндаль", quantity: 30, unit: "г" }
-                    ]
-                }
-            ],
-            lunch: [
-                {
-                    name: "Будда-боул с тофу",
-                    ingredients: [
-                        { name: "тофу", quantity: 150, unit: "г" },
-                        { name: "киноа", quantity: 100, unit: "г" },
-                        { name: "авокадо", quantity: 1, unit: "шт" },
-                        { name: "морковь", quantity: 100, unit: "г" }
-                    ]
-                }
-            ],
-            dinner: [
-                {
-                    name: "Чечевичный суп",
-                    ingredients: [
-                        { name: "чечевица", quantity: 150, unit: "г" },
-                        { name: "морковь", quantity: 100, unit: "г" },
-                        { name: "лук", quantity: 1, unit: "шт" },
-                        { name: "сельдерей", quantity: 50, unit: "г" }
-                    ]
-                }
-            ]
-        };
-    }
-
-    getMediterraneanMeals() {
-        return {
-            breakfast: [
-                {
-                    name: "Греческий йогурт с медом и орехами",
-                    ingredients: [
-                        { name: "греческий йогурт", quantity: 200, unit: "г" },
-                        { name: "мед", quantity: 20, unit: "г" },
-                        { name: "грецкие орехи", quantity: 30, unit: "г" },
-                        { name: "финики", quantity: 3, unit: "шт" }
-                    ]
-                }
-            ],
-            lunch: [
-                {
-                    name: "Греческий салат с фетой",
-                    ingredients: [
-                        { name: "помидор", quantity: 2, unit: "шт" },
-                        { name: "огурец", quantity: 1, unit: "шт" },
-                        { name: "перец", quantity: 1, unit: "шт" },
-                        { name: "сыр фета", quantity: 100, unit: "г" },
-                        { name: "оливки", quantity: 50, unit: "г" }
-                    ]
-                }
-            ],
-            dinner: [
-                {
-                    name: "Рыба на гриле с овощами",
-                    ingredients: [
-                        { name: "дорадо", quantity: 250, unit: "г" },
-                        { name: "цуккини", quantity: 150, unit: "г" },
-                        { name: "баклажан", quantity: 150, unit: "г" },
-                        { name: "розмарин", quantity: 5, unit: "г" }
-                    ]
-                }
-            ]
-        };
-    }
-
-    // Остальные методы остаются без изменений
     init3DEffects() {
         // Инициализация 3D эффектов для карточек
         this.initCard3DEffects();
@@ -406,6 +96,7 @@ class NutriVision3D {
     }
 
     initParticles() {
+        // Простая реализация частиц без внешних библиотек
         const container = document.getElementById('particles-js');
         if (!container) return;
 
@@ -425,6 +116,7 @@ class NutriVision3D {
             container.appendChild(particle);
         }
 
+        // Добавляем стили для частиц
         const style = document.createElement('style');
         style.textContent = `
             @keyframes floatParticle {
@@ -457,6 +149,7 @@ class NutriVision3D {
             observer.observe(el);
         });
 
+        // Добавляем стили для анимации появления
         const style = document.createElement('style');
         style.textContent = `
             @keyframes fadeInUp {
@@ -471,6 +164,49 @@ class NutriVision3D {
             }
         `;
         document.head.appendChild(style);
+    }
+
+    async generateAIPlan() {
+        const form = document.getElementById('aiForm3D');
+        const button = form.querySelector('.btn-generate-3d');
+        
+        // Показываем индикатор загрузки
+        button.classList.add('loading');
+        
+        const preferences = {
+            dietGoal: document.getElementById('goal3D').value,
+            dietType: document.querySelector('.chip-3d.active').dataset.value,
+            excludeFoods: this.getExclusionTags(),
+            calories: 2000 // Можно добавить поле для калорий
+        };
+
+        try {
+            const response = await fetch(`${this.API_BASE_URL}/api/generate-meal-plan`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(preferences)
+            });
+
+            if (!response.ok) {
+                throw new Error(`Ошибка сервера: ${response.status}`);
+            }
+
+            const mealPlan = await response.json();
+            this.currentPlan = mealPlan;
+            this.display3DPlan(mealPlan);
+            this.showResults();
+            
+            // Анимация успеха
+            this.showSuccessAnimation();
+
+        } catch (error) {
+            console.error('Ошибка:', error);
+            this.showError('Не удалось сгенерировать план. Проверьте подключение к серверу.');
+        } finally {
+            button.classList.remove('loading');
+        }
     }
 
     display3DPlan(mealPlan) {
@@ -496,7 +232,7 @@ class NutriVision3D {
                         <div class="meal-name">${day.meals.breakfast.name}</div>
                         <div class="meal-ingredients">
                             ${day.meals.breakfast.ingredients.map(ing => 
-                                `<span class="ingredient-tag">${ing.name} - ${ing.quantity}${ing.unit}</span>`
+                                `<span class="ingredient-tag">${ing.name}</span>`
                             ).join('')}
                         </div>
                     </div>
@@ -506,7 +242,7 @@ class NutriVision3D {
                         <div class="meal-name">${day.meals.lunch.name}</div>
                         <div class="meal-ingredients">
                             ${day.meals.lunch.ingredients.map(ing => 
-                                `<span class="ingredient-tag">${ing.name} - ${ing.quantity}${ing.unit}</span>`
+                                `<span class="ingredient-tag">${ing.name}</span>`
                             ).join('')}
                         </div>
                     </div>
@@ -516,7 +252,7 @@ class NutriVision3D {
                         <div class="meal-name">${day.meals.dinner.name}</div>
                         <div class="meal-ingredients">
                             ${day.meals.dinner.ingredients.map(ing => 
-                                `<span class="ingredient-tag">${ing.name} - ${ing.quantity}${ing.unit}</span>`
+                                `<span class="ingredient-tag">${ing.name}</span>`
                             ).join('')}
                         </div>
                     </div>
@@ -526,14 +262,18 @@ class NutriVision3D {
 
         container.innerHTML = html;
         
+        // Реинициализируем 3D эффекты для новых карточек
         setTimeout(() => this.initCard3DEffects(), 100);
+        
+        // Генерируем список покупок
         this.generate3DShoppingList(mealPlan);
     }
 
     calculateDayCalories(day) {
+        // Простой расчет калорий (в реальном приложении нужно точнее)
         let total = 0;
         for (const mealType in day.meals) {
-            total += day.meals[mealType].ingredients.length * 150;
+            total += day.meals[mealType].ingredients.length * 150; // Примерный расчет
         }
         return Math.round(total);
     }
@@ -605,6 +345,7 @@ class NutriVision3D {
         html += '</div>';
         container.innerHTML = html;
 
+        // Добавляем обработчики для чекбоксов
         this.addShoppingListHandlers();
         this.saveToStorage();
     }
@@ -617,9 +358,7 @@ class NutriVision3D {
             'рыба': '🐟 Рыба',
             'молоч': '🥛 Молочные',
             'зерн': '🌾 Зерновые',
-            'специ': '🧂 Специи',
-            'орех': '🥜 Орехи',
-            'сыр': '🧀 Сыр'
+            'специ': '🧂 Специи'
         };
 
         for (const [key, value] of Object.entries(categories)) {
@@ -685,6 +424,7 @@ class NutriVision3D {
             button.innerHTML = '<i class="fas fa-sync-alt"></i> Вращать';
         }
 
+        // Добавляем анимацию вращения
         if (!document.querySelector('#rotate3d-animation')) {
             const style = document.createElement('style');
             style.id = 'rotate3d-animation';
@@ -699,16 +439,46 @@ class NutriVision3D {
     }
 
     show3DDemo() {
-        const demoPlan = this.generateSmartDemoPlan({
-            dietGoal: 'health',
-            dietType: 'balanced',
-            excludeFoods: ''
-        });
+        // Демо с предзагруженными данными
+        const demoPlan = {
+            week: [
+                {
+                    day: "Понедельник",
+                    meals: {
+                        breakfast: {
+                            name: "Смузи боул с ягодами",
+                            ingredients: [
+                                { name: "Банан", quantity: 1, unit: "шт" },
+                                { name: "Клубника", quantity: 100, unit: "г" },
+                                { name: "Миндальное молоко", quantity: 200, unit: "мл" }
+                            ]
+                        },
+                        lunch: {
+                            name: "Куриный салат",
+                            ingredients: [
+                                { name: "Куриная грудка", quantity: 150, unit: "г" },
+                                { name: "Салат айсберг", quantity: 100, unit: "г" },
+                                { name: "Помидор", quantity: 1, unit: "шт" }
+                            ]
+                        },
+                        dinner: {
+                            name: "Лосось с овощами",
+                            ingredients: [
+                                { name: "Лосось", quantity: 200, unit: "г" },
+                                { name: "Брокколи", quantity: 150, unit: "г" },
+                                { name: "Морковь", quantity: 100, unit: "г" }
+                            ]
+                        }
+                    }
+                }
+            ]
+        };
 
         this.currentPlan = demoPlan;
         this.display3DPlan(demoPlan);
         this.showResults();
         
+        // Прокручиваем к результатам
         document.getElementById('results3D').scrollIntoView({ behavior: 'smooth' });
     }
 
@@ -716,8 +486,10 @@ class NutriVision3D {
         const results = document.getElementById('results3D');
         results.classList.remove('hidden');
         
+        // Анимация появления
         results.style.animation = 'fadeInUp 1s ease-out';
         
+        // Прокручиваем к результатам
         setTimeout(() => {
             results.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 500);
@@ -747,6 +519,7 @@ class NutriVision3D {
             success.remove();
         }, 2000);
         
+        // Добавляем анимацию
         if (!document.querySelector('#success-animation')) {
             const style = document.createElement('style');
             style.id = 'success-animation';
@@ -783,6 +556,7 @@ class NutriVision3D {
             setTimeout(() => error.remove(), 500);
         }, 3000);
         
+        // Добавляем анимации ошибки
         if (!document.querySelector('#error-animation')) {
             const style = document.createElement('style');
             style.id = 'error-animation';
