@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriVision 3D | AI Планировщик Питания</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Анимированный фон -->
+    <div class="animated-bg">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
+    </div>
+
+    <!-- 3D навигация -->
+    <nav class="navbar-3d">
+        <div class="nav-container">
+            <div class="logo-3d">
+                <span class="logo-text">NutriVision</span>
+                <div class="logo-particle"></div>
+            </div>
+            <ul class="nav-menu-3d">
+                <li><a href="#planning" class="nav-link-3d"><i class="fas fa-robot"></i> ИИ Планировщик</a></li>
+                <li><a href="#recipes" class="nav-link-3d"><i class="fas fa-book"></i> Рецепты</a></li>
+                <li><a href="#shopping" class="nav-link-3d"><i class="fas fa-shopping-cart"></i> Покупки</a></li>
+                <li><a href="#profile" class="nav-link-3d"><i class="fas fa-user-astronaut"></i> Профиль</a></li>
+            </ul>
+            <div class="nav-toggle-3d">
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Герой секция с 3D эффектом -->
+    <section class="hero-3d">
+        <div class="hero-container">
+            <div class="hero-content-3d">
+                <div class="floating-ai-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h1 class="hero-title-3d">
+                    <span class="title-gradient">NutriVision</span>
+                    <span class="title-sub">3D AI Планировщик</span>
+                </h1>
+                <p class="hero-description">Глубокое обучение создает ваше идеальное питание в инновационном 3D интерфейсе</p>
+                
+                <div class="cta-buttons-3d">
+                    <button class="btn-neon" id="startAI">
+                        <span class="btn-glow"></span>
+                        <i class="fas fa-magic"></i>
+                        Запустить ИИ
+                    </button>
+                    <button class="btn-hologram" id="demoBtn">
+                        <i class="fas fa-play"></i>
+                        3D Демо
+                    </button>
+                </div>
+            </div>
+            
+            <div class="hero-visual-3d">
+                <div class="floating-food-card">
+                    <div class="food-card-3d">
+                        <div class="card-face card-front">
+                            <div class="food-icon"><i class="fas fa-apple-alt"></i></div>
+                            <h3>Завтрак</h3>
+                        </div>
+                        <div class="card-face card-back">
+                            <p>Смузи боул с суперфудами</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="particles-container" id="particles-js"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3D форма для ИИ -->
+    <section id="planning" class="ai-form-3d">
+        <div class="container-3d">
+            <div class="section-header-3d">
+                <h2>Персональный ИИ Нутрициолог</h2>
+                <div class="pulse-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+
+            <div class="form-container-3d">
+                <form id="aiForm3D" class="ai-form-grid">
+                    <div class="input-group-3d">
+                        <label class="input-label">🎯 Ваша цель</label>
+                        <div class="select-3d">
+                            <select id="goal3D">
+                                <option value="weight_loss">⚡ Похудение</option>
+                                <option value="muscle">💪 Набор массы</option>
+                                <option value="health">❤️ Здоровье</option>
+                                <option value="energy">🔋 Энергия</option>
+                            </select>
+                            <div class="select-arrow"></div>
+                        </div>
+                    </div>
+
+                    <div class="input-group-3d">
+                        <label class="input-label">🍽️ Стиль питания</label>
+                        <div class="chip-container">
+                            <div class="chip-3d active" data-value="balanced">Сбалансированное</div>
+                            <div class="chip-3d" data-value="keto">Кето</div>
+                            <div class="chip-3d" data-value="vegan">Веган</div>
+                            <div class="chip-3d" data-value="mediterranean">Средиземноморское</div>
+                        </div>
+                    </div>
+
+                    <div class="input-group-3d">
+                        <label class="input-label">🚫 Исключить</label>
+                        <div class="tags-input-3d">
+                            <input type="text" id="exclude3D" placeholder="Введите продукт...">
+                            <div class="tags-container" id="tagsContainer"></div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-generate-3d">
+                        <div class="btn-spinner"></div>
+                        <i class="fas fa-rocket"></i>
+                        Сгенерировать 3D План
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3D Результаты -->
+    <section class="results-3d hidden" id="results3D">
+        <div class="container-3d">
+            <div class="results-header">
+                <h2>Ваш План Питания 3D</h2>
+                <div class="results-actions">
+                    <button class="btn-3d-action" id="rotateView">
+                        <i class="fas fa-sync-alt"></i> Вращать
+                    </button>
+                    <button class="btn-3d-action" id="exportPlan">
+                        <i class="fas fa-download"></i> Экспорт
+                    </button>
+                </div>
+            </div>
+
+            <div class="week-container-3d" id="weekContainer">
+                <!-- 3D карточки дней будут генерироваться здесь -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 3D Список покупок -->
+    <section id="shopping" class="shopping-3d">
+        <div class="container-3d">
+            <h2>🛒 3D Список Покупок</h2>
+            <div class="shopping-list-3d" id="shoppingList3D">
+                <div class="empty-state-3d">
+                    <i class="fas fa-shopping-basket"></i>
+                    <p>Сгенерируйте план питания чтобы увидеть список</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer class="footer-3d">
+        <div class="container-3d">
+            <div class="footer-content">
+                <div class="footer-logo">NutriVision 3D</div>
+                <p>Создано с ❤️ и передовым ИИ</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Скрипты -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
